@@ -1,6 +1,6 @@
-var albumBucketName = 'hoza-photo-album';
+var albumBucketName = 'photo-album-hoza';
 var bucketRegion = 'ap-northeast-2';
-var IdentityPoolId = 'ap-northeast-2:b6a04939-12f9-44ad-87dc-90102b735929';
+var IdentityPoolId = 'ap-northeast-2:c9123c64-387a-48b1-bf8f-78eccd3fd928';
 
 AWS.config.update({
   region: bucketRegion,
@@ -23,6 +23,7 @@ function listAlbums() {
     if (err) {
       return alert('There was an error listing your albums: ' + err.message);
     } else {
+      console.log('앨범', data.CommonPrefixes)
       var albums = data.CommonPrefixes.map(function (commonPrefix) {
         var prefix = commonPrefix.Prefix;
         var albumName = decodeURIComponent(prefix.replace('/', ''));
@@ -97,6 +98,7 @@ function viewAlbum(albumName) {
     // 'this' references the AWS.Response instance that represents the response
     var href = this.request.httpRequest.endpoint.href;
     var bucketUrl = href + albumBucketName + '/';
+    console.log('앨범', data.Contents)
 
     var photos = data.Contents.map(function (photo) {
       var photoKey = photo.Key;
@@ -156,6 +158,7 @@ function addPhoto(albumName) {
     ACL: 'public-read'
   }, function (err, data) {
     if (err) {
+      console.log(err)
       return alert('There was an error uploading your photo: ', err.message);
     }
     alert('Successfully uploaded photo.');
